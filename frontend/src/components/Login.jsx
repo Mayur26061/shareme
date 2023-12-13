@@ -11,7 +11,7 @@ const Login = () => {
   const navigate = useNavigate()
   const decodeResponse = (response)=>{
       let decode = jwtDecode(response.credential)
-      console.log(decode)
+      // console.log(decode)
       localStorage.setItem('uid',decode.sub)
       const obj = {
         _id:decode.sub,
@@ -22,7 +22,7 @@ const Login = () => {
       client.createIfNotExists(obj).then(()=>{
         navigate('/')
       });
-      console.log(obj)
+      // console.log(obj)
   }
   return (
     <div className='flex justify-start items-center flex-col h-screen'>
