@@ -9,6 +9,11 @@ export default {
             type: 'string'
         },
         {
+            name:'about',
+            title:'About',
+            type:'string'
+        },
+        {
             name:'destination',
             title: 'Destination',
             type: 'url'
@@ -32,7 +37,7 @@ export default {
             type: 'string'
         },
         {
-            name:'postedBY',
+            name:'postedBy',
             title: 'PostedBy',
             type: 'postedBy'
         },
