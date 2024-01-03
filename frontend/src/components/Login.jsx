@@ -6,6 +6,7 @@ import shareVideo from '../assets/share.mp4'
 import logo from '../assets/logowhite.png'
 import {jwtDecode} from 'jwt-decode'
 import { client } from '../client';
+import axios from 'axios'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -16,6 +17,12 @@ const Login = () => {
       const obj = {
         _id:decode.sub,
         _type:'user',
+        userName:decode.name,
+        image:decode.picture
+      }
+      localStorage.setItem('uid',decode.sub)
+      console.log()
+      const obj2 = {
         userName:decode.name,
         image:decode.picture
       }

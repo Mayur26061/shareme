@@ -41,9 +41,12 @@ const Home = () => {
           <Link to="/">
             <img src={logo} alt="logo" className="w-28" />
           </Link>
-          <Link to={`user-profile/${user?._id}`}>
+          {user &&(
+
+            <Link to={`user-profile/${user?._id}`}>
             <img src={user?.image} alt="user logo" className="w-28" />
           </Link>
+            )}
         </div>
       {toggleSidebar && (
         <div className="fixed w-4/5 bg-white h-screen overflow-y-auto shadow-md z-10 animate-slide-in">
