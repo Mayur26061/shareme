@@ -5,21 +5,25 @@ import { Link, Routes, Route } from "react-router-dom";
 import UserProfile from "../components/UserProfile";
 import Sidebar from "../components/Sidebar";
 import Pins from "./Pins";
-import { client } from "../client";
 import logo from "../assets/logo.png";
-import { userQuery } from "../utils/data";
-import { fetchUser } from "../utils/fetchUser";
+import { fetchUserToken } from "../utils/fetchUser";
+import axios from "axios";
 
 const Home = () => {
   const [toggleSidebar, setToggleSidebar] = useState(false);
   const [user, setUser] = useState(null);
   const scrollRef = useRef(null);
-  const userId = fetchUser()
+  const userId = fetchUserToken()
 
   useEffect(() => {
-    const query = userQuery(userId);
-    client.fetch(query).then((res) => {
-      setUser(res[0]);
+    axios.get("http://localhost:8080/user/me",{
+      headers:{token:userId}
+    }).then((response)=>{
+      // console.log(response.data.user)
+          setUser(response.data.user);
+          localStorage.setItem('uid',response.data.user._id)
+    }).catch((error)=>{
+      console.log(error)
     });
   }, []);
 
@@ -41,10 +45,13 @@ const Home = () => {
           <Link to="/">
             <img src={logo} alt="logo" className="w-28" />
           </Link>
-          <Link to={`user-profile/${user?._id}`}>
+          {user &&(
+
+            <Link to={`user-profile/${user?._id}`}>
             <img src={user?.image} alt="user logo" className="w-28" />
           </Link>
-        </div>
+            )}
+        </div>  
       {toggleSidebar && (
         <div className="fixed w-4/5 bg-white h-screen overflow-y-auto shadow-md z-10 animate-slide-in">
           <div className="absolute w-full flex justify-end items-center p-2">

@@ -5,24 +5,24 @@ import {FcGoogle} from 'react-icons/fc';
 import shareVideo from '../assets/share.mp4'
 import logo from '../assets/logowhite.png'
 import {jwtDecode} from 'jwt-decode'
-import { client } from '../client';
+import axios from 'axios'
 
 const Login = () => {
   const navigate = useNavigate()
   const decodeResponse = (response)=>{
       let decode = jwtDecode(response.credential)
-      // console.log(decode)
-      localStorage.setItem('uid',decode.sub)
       const obj = {
-        _id:decode.sub,
-        _type:'user',
-        userName:decode.name,
-        image:decode.picture
+        username:decode.email,
+        name:decode.name,
+        image:decode.picture.replace("=s96-c","")
+
       }
-      client.createIfNotExists(obj).then(()=>{
-        navigate('/')
-      });
-      // console.log(obj)
+      axios.post("http://localhost:8080/user/login",{...obj}).then(res=>{
+        if (res.data.token) {
+          localStorage.setItem("token", res.data.token);
+          navigate('/')   
+        }
+      })
   }
   return (
     <div className='flex justify-start items-center flex-col h-screen'>
