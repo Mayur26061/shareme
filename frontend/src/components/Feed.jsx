@@ -1,29 +1,27 @@
 import React,{useEffect, useState} from 'react'
-import { client } from '../client';
 import MasonryLayout from './MasonryLayout';
 import Spinner from './Spinner';
 import { useParams } from 'react-router-dom';
-import { searchQuery, feedQuery } from '../utils/data';
+import axios from 'axios';
 const Feed = () => {
   const [loading, setLoading] = useState(false)
   const [pins,setPins] = useState(null)
   const {categoryId} =useParams()
   useEffect(()=>{
     setLoading(true)
-    if (categoryId) {
-      const query = searchQuery(categoryId);
-      client.fetch(query).then((data) => {
-        setPins(data)
-        setLoading(false);
-      });
-    } else {
-      client.fetch(feedQuery).then((data) => {
-        debugger;
-        setPins(data)
-        setLoading(false);
-      });
-    }
 
+    axios.get("http://localhost:8080/user/getPin",{
+      params:{
+        categoryId
+      }
+    }).then((response)=>{
+      // if(response.data)
+      // console.log(response)
+      setLoading(false);
+      setPins(response.data.pins)
+    }).catch((error)=>{
+      console.log(error)
+    });
   },[categoryId]);
   if (loading) return <Spinner message="We are adding new ideas to your feed"/>
   return (

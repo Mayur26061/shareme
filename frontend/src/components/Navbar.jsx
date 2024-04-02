@@ -22,9 +22,12 @@ const Navbar = ({searchTerm, setSearchTerm, user}) => {
           <Link to='/create-pin' className='bg-black text-white rounded-lg w-12 h-10 md:w-14 md:h-12 flex justify-center items-center'>
             <IoMdAdd/>
           </Link>
-          <Link to={`user-profile/${user._id}`} className='hidden md:block'>
+          {user && (
+
+            <Link to={`user-profile/${user._id}`} className='hidden md:block'>
             <img src={user.image} alt="user" className='w-14 h-12 rounded-full'/>
           </Link>
+            )}
         </div>
     </div>
   )
