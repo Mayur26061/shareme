@@ -8,15 +8,16 @@ import axios from "axios";
 
 import { fetchUserToken, fetchUserId } from "../utils/fetchUser";
 
-const Pin = ({ pin: { postedBy, _id, image, savePost } }) => {
+const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
   const [postHovered, setPostHovered] = useState(false);
   const [savingPost, setSavingPost] = useState(false);
   const navigate = useNavigate();
   const token = fetchUserToken();
   const uid = fetchUserId();
-//   const alreadySaved = true;
-  const [alreadySaved,setAlreadySaved] = useState(!!(savePost?.filter((item)=> item._id === uid))?.length)
-  console.log("SAVE", savePost);
+  //   const alreadySaved = true;
+  const [alreadySaved, setAlreadySaved] = useState(
+    !!savePost?.filter((item) => item._id === uid)?.length
+  );
   const savePin = (ev, id) => {
     ev.stopPropagation();
     if (!alreadySaved) {
@@ -31,9 +32,9 @@ const Pin = ({ pin: { postedBy, _id, image, savePost } }) => {
           }
         )
         .then((response) => {
-          console.log(response.data);
-          setAlreadySaved(true)
-          window.location.reload()  
+          // console.log(response.data);
+          setAlreadySaved(true);
+          window.location.reload();
         })
         .catch((error) => {
           console.log(error);
@@ -52,7 +53,7 @@ const Pin = ({ pin: { postedBy, _id, image, savePost } }) => {
       //         }])
       //         .commit()
       //         .then(()=>{
-      //             
+      //
       //             setSavingPost(false)
       //         })
     }
@@ -101,6 +102,28 @@ const Pin = ({ pin: { postedBy, _id, image, savePost } }) => {
                   Save
                 </button>
               )}
+            </div>
+            <div className="flex justify-between items-center gap-2 w-full">
+              {destination && (
+                <a
+                  href={destination}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-white flex items-center gap-2 text-black font-bold p-2 pl-4 pr-4 rounded-full opacity-70 hover:opacity-100 hover:shadow-md"
+                >
+                  <BsFillArrowUpRightCircleFill />
+                  {destination.length > 20
+                    ? destination.slice(8, 20)
+                    : destination}
+                </a>
+              )}
+              <button
+                type="button"
+                className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
+              >
+                Delete
+              </button>
             </div>
           </div>
         )}

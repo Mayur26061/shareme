@@ -50,4 +50,13 @@ router.post("/savePin", authenticate, async (req, res) => {
     pin.save()
     res.send({messgae:"Saved"})
 })
+
+router.get("/pin/:pinId", authenticate, async (req, res) => {
+
+    const pin = await Pin.findById(req.params.pinId);
+    if (pin){
+        return res.send({...pin})
+    }
+    res.status(404).send({error:"Not Found"})
+})
 module.exports = router;
