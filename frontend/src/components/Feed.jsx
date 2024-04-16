@@ -3,6 +3,7 @@ import MasonryLayout from './MasonryLayout';
 import Spinner from './Spinner';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { BASE_URL } from '../utils/config';
 const Feed = () => {
   const [loading, setLoading] = useState(false)
   const [pins,setPins] = useState(null)
@@ -10,7 +11,7 @@ const Feed = () => {
   useEffect(()=>{
     setLoading(true)
 
-    axios.get("http://localhost:8080/user/getPin",{
+    axios.get(`${BASE_URL}/getPin`,{
       params:{
         categoryId
       }

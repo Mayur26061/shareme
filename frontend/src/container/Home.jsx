@@ -8,6 +8,7 @@ import Pins from "./Pins";
 import logo from "../assets/logo.png";
 import { fetchUserToken } from "../utils/fetchUser";
 import axios from "axios";
+import { BASE_URL } from "../utils/config";
 
 const Home = () => {
   const [toggleSidebar, setToggleSidebar] = useState(false);
@@ -16,7 +17,8 @@ const Home = () => {
   const userId = fetchUserToken()
 
   useEffect(() => {
-    axios.get("http://localhost:8080/user/me",{
+    
+    axios.get(`${BASE_URL}/me`,{
       headers:{token:userId}
     }).then((response)=>{
       // console.log(response.data.user)
