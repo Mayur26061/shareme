@@ -6,6 +6,7 @@ import shareVideo from '../assets/share.mp4'
 import logo from '../assets/logowhite.png'
 import {jwtDecode} from 'jwt-decode'
 import axios from 'axios'
+import { BASE_URL } from '../utils/config';
 
 const Login = () => {
   const navigate = useNavigate()
@@ -17,7 +18,7 @@ const Login = () => {
         image:decode.picture.replace("=s96-c","")
 
       }
-      axios.post("http://localhost:8080/user/login",{...obj}).then(res=>{
+      axios.post(`${BASE_URL}/login`,{...obj}).then(res=>{
         if (res.data.token) {
           localStorage.setItem("token", res.data.token);
           navigate('/')   

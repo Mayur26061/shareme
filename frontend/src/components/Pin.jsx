@@ -7,6 +7,7 @@ import { BsFillArrowUpRightCircleFill } from "react-icons/bs";
 import axios from "axios";
 
 import { fetchUserToken, fetchUserId } from "../utils/fetchUser";
+import { BASE_URL } from "../utils/config";
 
 const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
   const [postHovered, setPostHovered] = useState(false);
@@ -18,12 +19,22 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
   const [alreadySaved, setAlreadySaved] = useState(
     !!savePost?.filter((item) => item._id === uid)?.length
   );
+  const deletePin = (ev) => {
+    ev.stopPropagation();
+    axios.post(
+      `${BASE_URL}/deletepin/${_id}`,
+      {},
+      {
+        headers: { token: token },
+      }
+    );
+  };
   const savePin = (ev, id) => {
     ev.stopPropagation();
     if (!alreadySaved) {
       axios
         .post(
-          "http://localhost:8080/user/savePin",
+          `${BASE_URL}/savePin`,
           {
             pid: id,
           },
@@ -39,23 +50,6 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
         .catch((error) => {
           console.log(error);
         });
-      //         setSavingPost(true)
-      //         client
-      //         .patch(id)
-      //         .setIfMissing({save:[]})
-      //         .insert('after','save[-1]',[{
-      //             _key:uuid4(),
-      //             userId: userId,
-      //             postedBy:{
-      //                 _type: 'postedBy',
-      //                 _ref:userId
-      //             }
-      //         }])
-      //         .commit()
-      //         .then(()=>{
-      //
-      //             setSavingPost(false)
-      //         })
     }
   };
   return (
@@ -66,7 +60,7 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
         onClick={() => navigate(`/pin-detail/${_id}`)}
         className="relative cursor-zoom-in w-auto hover:shadow-lg rounded-lg overflow-hidden transition-all duration-500 ease-in-out"
       >
-        <img alt="" className="rounded-lg w-full" src={image} />
+        <img alt="" className="rounded-lg w-full h-96" src={image} />
         {postHovered && (
           <div
             className="absolute top-0 w-full h-full flex flex-col justify-between p-1 pr-2 pb-2 z-50"
@@ -118,16 +112,27 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
                     : destination}
                 </a>
               )}
-              <button
-                type="button"
-                className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
-              >
-                Delete
-              </button>
+              {postedBy._id === uid && (
+                <button
+                  type="button"
+                  className="bg-white p-2 opacity-70 hover:opacity-100 font-bold text-dark text-base rounded-3xl hover:shadow-md outline-none"
+                  onClick={deletePin}
+                >
+                  <AiTwotoneDelete/>
+                </button>
+              )}
             </div>
           </div>
         )}
       </div>
+      <Link to={`user-profile/${uid}`} className="flex gap-2 mt-2 items-center">
+      <img
+      className="w-8 h-8 rounded-full object-cover"
+      src={postedBy?.image}
+      alt="user-profile"
+      />
+      <p className="font-semibold capitalize">{postedBy?.name}</p>
+      </Link>
     </div>
   );
 };
