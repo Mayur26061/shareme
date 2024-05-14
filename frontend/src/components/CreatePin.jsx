@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import Spinner from "./Spinner";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
-const CreatePin = () => {
+import { categories, BASE_URL } from "../utils/config";
+import axios from "axios";
+import { fetchUserToken } from "../utils/fetchUser";
+import { useNavigate } from "react-router-dom";
+const CreatePin = ({ user }) => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
-  const [name, setName] = useState("");
   const [about, setAbout] = useState("");
   const [destination, setDestination] = useState("");
   const [category, setCategory] = useState(null);
@@ -12,6 +16,7 @@ const CreatePin = () => {
   const [loading, setLoading] = useState(false);
   const [imageAsset, setImageAsset] = useState(null);
   const [wrongImageType, setWrongImageType] = useState(false);
+  const [image, setImage] = useState(null);
 
   const updateImage = (e) => {
     const { type } = e.target.files[0];
@@ -23,11 +28,51 @@ const CreatePin = () => {
       type === "image/tiff"
     ) {
       setWrongImageType(false);
+      setImageAsset(URL.createObjectURL(e.target.files[0]));
+      setImage(e.target.files[0]);
+    } else {
+      setWrongImageType(true);
     }
-    setImageAsset(URL.createObjectURL(e.target.files[0]));
-    debugger;
   };
-  const createPin = () => {};
+  const getImageURL = async () => {
+    URL.revokeObjectURL(imageAsset);
+    const cloudName = process.env.CLOUD_NAME;
+    const images = new FormData();
+    images.append("file", image);
+    images.append("cloud_name", cloudName);
+    images.append("upload_preset", process.env.UPLOAD_PRESET);
+    const res = await axios.post(
+      `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+      images
+    );
+    return res.data.secure_url;
+  };
+  const savePin = async (e) => {
+    setLoading(true);
+    if (imageAsset && title && destination && about) {
+      const imageURL = await getImageURL();
+      const doc = {
+        title,
+        destination,
+        category,
+        name: about,
+        image: imageURL,
+      };
+      await axios.post(`${BASE_URL}/createPin`, doc, {
+        headers: {
+          token: fetchUserToken(),
+        },
+      });
+      setLoading(false);
+      navigate("/");
+    } else {
+      setFields(true);
+      setTimeout(() => {
+        setFields(false);
+      }, 2000);
+      setLoading(false);
+    }
+  };
   return (
     <div className="flex flex-col justigy-center items-center mt-5 lg:h-4/5">
       {fields && (
@@ -86,20 +131,59 @@ const CreatePin = () => {
             onChange={(e) => setTitle(e.target.value)}
             className="outline-none text-2xl sm:text-3xl font-bold boder-b-2 border-gray-200 p-2 "
           />
+          {user && (
+            <div className="flex gap-2 my-2 items-center bg-white rounded-lg">
+              <img src={user.image} className="w-10 h-10 rounded-full" alt="" />
+              <p className="font-bold">{user.name}</p>
+            </div>
+          )}
           <input
             type="text"
             value={about}
             placeholder="About"
-            className="outline-none text-2xl sm:text-3xl font-bold boder-b-2 border-gray-200 p-2 "
+            className="outline-none text-base sm:text-lg boder-b-2 border-gray-200 p-2 "
             onChange={(e) => setAbout(e.target.value)}
           />
           <input
             type="text"
             value={destination}
-            placeholder="Destination"
-            className="outline-none text-2xl sm:text-3xl font-bold boder-b-2 border-gray-200 p-2 "
+            placeholder="Add a destination link"
+            className="outline-none text-base sm:text-lg boder-b-2 border-gray-200 p-2 "
             onChange={(e) => setDestination(e.target.value)}
           />
+          <div className="flex flex-col">
+            <div>
+              <p className="mb-2 font-semibold text-lg sm:text-xl">
+                Choose Pin Category
+              </p>
+              <select
+                onChange={(e) => setCategory(e.target.value)}
+                className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer capitalize"
+              >
+                <option value="other" className="bg-white">
+                  Select Category
+                </option>
+                {categories.map((cat) => (
+                  <option
+                    key={cat.name}
+                    className="text-base border-0 outline-none bg-white text-black"
+                    value={cat.name}
+                  >
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex justify-end items-end mt-5">
+              <button
+                type="button"
+                onClick={savePin}
+                className="bg-red-400 text-white font-bold p-2 rounded-full w-28 outline-none"
+              >
+                Save Pin
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
