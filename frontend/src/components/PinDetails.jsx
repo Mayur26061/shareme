@@ -1,11 +1,87 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import { MdDownloadForOffline } from "react-icons/md";
+import { Link, useParams } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import MasonryLayout from "./MasonryLayout";
+import Spinner from "./Spinner";
+import axios from "axios";
+import { BASE_URL } from "../utils/config";
+import { fetchUserToken } from "../utils/fetchUser";
 
-const Pindetails = () => {
+const Pindetails = ({ user }) => {
+  const [pin, setPin] = useState(null);
+  const [pinDetail, setPinDetail] = useState(null);
+  const [comment, setComment] = useState("");
+  const [addingComment, setAddingComment] = useState(false);
+  const { pinId } = useParams();
+  const token = fetchUserToken();
+
+  const fetchPinDetails = async () => {
+    const res = await axios.get(BASE_URL + `/pin/${pinId}`, {
+      headers: { token },
+    });
+    debugger;
+    setPinDetail(res.data.pin);
+  };
+  useEffect(() => {
+    fetchPinDetails();
+  }, [pinId]);
+  if (!pinDetail) return <Spinner message="Loading pin.." />;
   return (
-    <div>
-      Pindetails
+    <div
+      className="flex xl:flex-row flex-col m-auto bg-white "
+      style={{ maxWidth: "1000", borderRadius: "32px" }}
+    >
+      <div className="flex justify-center items-center md:items-start flex-initial">
+        <img
+          src={pinDetail?.image}
+          className="rounded-t-3xl rounded-b-lg max-h-600"
+          alt="User Post"
+        />
+      </div>
+      <div className="w-full p-5 flex-1 xl:min-w-620">
+        <div className="flex items-center justify-between">
+          <div className="flex gap-2 items-center">
+            <a
+              href={`${pinDetail?.image}?dl=`}
+              download
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white w-8 h-8 rounded-full flex items-center justify-center text-dark text-xl opacity-75 hover:shadow-md outline-none"
+              rel="noreferrer"
+            >
+              <MdDownloadForOffline />
+            </a>
+          </div>
+          <a href={pinDetail?.destination} target="_blank" rel="noreferrer">
+            Source
+          </a>
+        </div>
+        <div>
+          <h1 className="text-4xl font-bold break-words mt-3">
+            {pinDetail.title}
+          </h1>
+          <p className="mt-3">{pinDetail.about}</p>
+        </div>
+        <Link
+          to={`user-profile/${pinDetail.postedBy._id}`}
+          className="flex gap-2 mt-2 items-center"
+        >
+          <img
+            className="w-8 h-8 rounded-full object-cover"
+            src={pinDetail.postedBy?.image}
+            alt="user-profile"
+          />
+          <p className="font-semibold capitalize">{pinDetail.postedBy?.name}</p>
+        </Link>
+        <h2 className="mt-5 tex-2xl">Comments</h2>
+        <div className="max-h-370 overflow-y-auto">{pinDetail.comment.map((com,i)=>(
+          <div className="flex gap-2 mt-5 items-center bg-light rounded-lg" key={i}>
+            
+          </div>
+        ))}</div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Pindetails
+export default Pindetails;
