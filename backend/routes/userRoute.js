@@ -3,7 +3,7 @@ const { Pin, User } = require("../db/schema");
 const jwt = require("jsonwebtoken");
 const authenticate = require("../middleware/auth");
 
-const getUser = async(userId)=>{
+const getUser = async (userId) => {
     const user = await User.findById(userId);
     return user
 }
@@ -31,7 +31,7 @@ router.get("/getPin", async (req, res) => {
     let pins;
     if (req.query.categoryId) {
         pins = await Pin.find({ category: req.query.categoryId }).populate('postedBy savePost');
-    } else {    
+    } else {
         pins = await Pin.find({}).populate('postedBy savePost');
     }
     res.send({ pins });
@@ -39,7 +39,7 @@ router.get("/getPin", async (req, res) => {
 
 router.post("/createPin", authenticate, async (req, res) => {
     const usr = await getUser(req.userId)
-    const data = {...req.body, 'postedBy':usr}
+    const data = { ...req.body, 'postedBy': usr }
     const pin = await Pin.create(data);
     res.send({ pin });
 });
@@ -53,20 +53,20 @@ router.post("/savePin", authenticate, async (req, res) => {
     const pin = await Pin.findById(req.body.pid);
     pin.savePost.push(user)
     pin.save()
-    res.send({messgae:"Saved"})
+    res.send({ messgae: "Saved" })
 })
 
 router.get("/pin/:pinId", authenticate, async (req, res) => {
 
-    const pin = await Pin.findById(req.params.pinId);
-    if (pin){
-        return res.send({...pin})
+    const pin = await Pin.findById(req.params.pinId).populate('postedBy comment');
+    if (pin) {
+        return res.send({ pin })
     }
-    res.status(404).send({error:"Not Found"})
+    res.status(404).send({ error: "Not Found" })
 })
-router.post("/deletepin/:pinId", authenticate, async(req,res)=>{
+router.post("/deletepin/:pinId", authenticate, async (req, res) => {
     const pin = await Pin.findByIdAndDelete(req.params.pinId)
     console.log(pin)
-    res.send({message:"Deleted"})
+    res.send({ message: "Deleted" })
 })
 module.exports = router;

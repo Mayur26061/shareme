@@ -36,11 +36,11 @@ const CreatePin = ({ user }) => {
   };
   const getImageURL = async () => {
     URL.revokeObjectURL(imageAsset);
-    const cloudName = process.env.CLOUD_NAME;
+    const cloudName = process.env.REACT_APP_CLOUD_NAME;
     const images = new FormData();
     images.append("file", image);
     images.append("cloud_name", cloudName);
-    images.append("upload_preset", process.env.UPLOAD_PRESET);
+    images.append("upload_preset", process.env.REACT_APP_UPLOAD_PRESET);
     const res = await axios.post(
       `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
       images
@@ -73,6 +73,9 @@ const CreatePin = ({ user }) => {
       setLoading(false);
     }
   };
+  if (loading){
+    return <Spinner message="Posting image"/>
+  }
   return (
     <div className="flex flex-col justigy-center items-center mt-5 lg:h-4/5">
       {fields && (
@@ -83,7 +86,6 @@ const CreatePin = ({ user }) => {
       <div className="flex lg:flex-col flex-col justify-center items-center bg-white lg:p-5 p-3 lg:w-4/5 w-full">
         <div className="bg-secondaryColor p-3 flex flex-0.7 w-full">
           <div className="flex justify-center items-center flex-col border-2 border-dotted border-gray-300 p-3 w-full h-420">
-            {loading && <Spinner />}
             {wrongImageType && <p>Wrong Image Type</p>}
             {!imageAsset ? (
               <label>
@@ -99,6 +101,7 @@ const CreatePin = ({ user }) => {
                   </p>
                 </div>
                 <input
+                accept="image/png,image/jpeg,image/svg,image/gif,image/tiff"
                   type="file"
                   name="upload-image"
                   onChange={updateImage}

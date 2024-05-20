@@ -19,15 +19,20 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
   const [alreadySaved, setAlreadySaved] = useState(
     !!savePost?.filter((item) => item._id === uid)?.length
   );
-  const deletePin = (ev) => {
+  const deletePin = async (ev) => {
     ev.stopPropagation();
-    axios.post(
-      `${BASE_URL}/deletepin/${_id}`,
-      {},
-      {
-        headers: { token: token },
-      }
-    );
+    try{
+
+      await axios.post(
+        `${BASE_URL}/deletepin/${_id}`,
+        {},
+        {
+          headers: { token: token },
+        }
+      );
+    }catch{
+      console.log("ERORO")
+    }
   };
   const savePin = (ev, id) => {
     ev.stopPropagation();
@@ -125,7 +130,7 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
           </div>
         )}
       </div>
-      <Link to={`user-profile/${uid}`} className="flex gap-2 mt-2 items-center">
+      <Link to={`user-profile/${postedBy._id}`} className="flex gap-2 mt-2 items-center bg-white rounded-lg">
       <img
       className="w-8 h-8 rounded-full object-cover"
       src={postedBy?.image}
