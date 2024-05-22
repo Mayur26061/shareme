@@ -73,8 +73,8 @@ const CreatePin = ({ user }) => {
       setLoading(false);
     }
   };
-  if (loading){
-    return <Spinner message="Posting image"/>
+  if (loading) {
+    return <Spinner message="Posting image" />;
   }
   return (
     <div className="flex flex-col justigy-center items-center mt-5 lg:h-4/5">
@@ -101,7 +101,7 @@ const CreatePin = ({ user }) => {
                   </p>
                 </div>
                 <input
-                accept="image/png,image/jpeg,image/svg,image/gif,image/tiff"
+                  accept="image/png,image/jpeg,image/svg,image/gif,image/tiff"
                   type="file"
                   name="upload-image"
                   onChange={updateImage}

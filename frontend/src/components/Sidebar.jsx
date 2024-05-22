@@ -9,7 +9,7 @@ const isActiveStyle = 'flex items-center px5 gap-3 font-extrabold border-r-2 bor
 
 const categories = [
   {name:'Animal'},
-  {name:'Wallpapers'},
+  {name:'Wallpaper'},
   {name:'Photography'},
   {name:'Gaming'},
   {name:'Coding'},
