@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { Pin, User } = require("../db/schema");
+const { Pin, User, Comment } = require("../db/schema");
 const jwt = require("jsonwebtoken");
 const authenticate = require("../middleware/auth");
 
@@ -28,12 +28,8 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/getPin", async (req, res) => {
-    let pins;
-    if (req.query.categoryId) {
-        pins = await Pin.find({ category: req.query.categoryId }).populate('postedBy savePost');
-    } else {
-        pins = await Pin.find({}).populate('postedBy savePost');
-    }
+    const cat = req.query.categoryId? { category: req.query.categoryId }:{}
+    const pins = await Pin.find(cat).populate('postedBy savePost');
     res.send({ pins });
 });
 
@@ -49,16 +45,24 @@ router.get("/me", authenticate, async (req, res) => {
 });
 
 router.post("/savePin", authenticate, async (req, res) => {
-    const user = await User.findById(req.userId);
+    const user = await getUser(req.userId);
     const pin = await Pin.findById(req.body.pid);
     pin.savePost.push(user)
-    pin.save()
+    await pin.save()
     res.send({ messgae: "Saved" })
 })
 
 router.get("/pin/:pinId", authenticate, async (req, res) => {
 
-    const pin = await Pin.findById(req.params.pinId).populate('postedBy comment');
+    const pin = await Pin.findById(req.params.pinId).populate([
+        {
+            path: 'comment',
+            populate: [{ path: 'postedBy' }]
+        },
+        {
+            path: 'postedBy',
+        }
+    ]);
     if (pin) {
         return res.send({ pin })
     }
@@ -68,5 +72,15 @@ router.post("/deletepin/:pinId", authenticate, async (req, res) => {
     const pin = await Pin.findByIdAndDelete(req.params.pinId)
     console.log(pin)
     res.send({ message: "Deleted" })
+})
+router.post("/addcomment/:pinId", authenticate, async(req, res)=>{
+    const user = await getUser(req.userId);
+    const pin = await Pin.findById(req.params.pinId);
+    const  {comment}  = req.body
+    const com = await Comment.create({comment,postedBy:user})
+    pin.comment.push(com)
+    await pin.save()
+    res.send({ message: "Added comment" })
+
 })
 module.exports = router;
