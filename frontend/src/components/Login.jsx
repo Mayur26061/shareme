@@ -20,7 +20,11 @@ const Login = () => {
       }
       axios.post(`${BASE_URL}/login`,{...obj}).then(res=>{
         if (res.data.token) {
+        debugger;
+
           localStorage.setItem("token", res.data.token);
+        localStorage.setItem("uid", res.data.uid);
+
           navigate('/')   
         }
       })
