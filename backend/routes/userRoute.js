@@ -7,6 +7,10 @@ const getUser = async (userId) => {
     const user = await User.findById(userId);
     return user
 }
+const getPins = async (query) => {
+    const pin = await Pin.find(query).populate('postedBy savePost');
+    return pin
+}
 
 router.get("/", (req, res) => {
     res.json({ message: "Helllo" });
@@ -24,12 +28,12 @@ router.post("/login", async (req, res) => {
     let token = jwt.sign({ id: logUser._id, username }, process.env.JWT_SECRET_KEY, {
         expiresIn: "10d",
     });
-    return res.send({ message: "Logged in", token,uid:logUser._id });
+    return res.send({ message: "Logged in", token, uid: logUser._id });
 });
 
 router.get("/getPin", async (req, res) => {
     const cat = req.query.categoryId ? { category: req.query.categoryId } : {}
-    const pins = await Pin.find(cat).populate('postedBy savePost');
+    const pins = await getPins(cat)
     res.send({ pins });
 });
 
@@ -85,5 +89,12 @@ router.post("/addcomment/:pinId", authenticate, async (req, res) => {
     await pin.save()
     res.send({ message: "Added comment" })
 })
+
+router.get("/getUserPin/:userId", authenticate, async (req, res) => {
+    let query = {}
+    query[req.query.key] = req.params.userId // postedBy or savePost
+    const pins = await getPins(query)
+    res.send({ pins });
+});
 
 module.exports = router;
