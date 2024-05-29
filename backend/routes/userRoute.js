@@ -97,4 +97,11 @@ router.get("/getUserPin/:userId", authenticate, async (req, res) => {
     res.send({ pins });
 });
 
+router.get("/search", authenticate, async (req, res) => {
+    const searchReg = { $regex: '.*' + req.query.search+ '.*' }
+    const query = { $or: [{ title: searchReg }, { category: searchReg },{ name: searchReg }] }
+    const pins = await getPins(query)
+    res.send({ pins });
+})
+
 module.exports = router;
