@@ -23,7 +23,6 @@ const Home = () => {
         headers: { token },
       })
       .then((response) => {
-        // console.log(response.data.user)
         setUser(response.data.user);
         localStorage.setItem("uid", response.data.user._id);
       })
