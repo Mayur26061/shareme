@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { FcGoogle } from "react-icons/fc";
@@ -7,9 +7,32 @@ import logo from "../assets/logowhite.png";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { BASE_URL } from "../utils/config";
+import { fetchUserId, fetchUserToken } from "../utils/fetchUser";
+import Spinner from "./Spinner";
 
 const Login = () => {
   const navigate = useNavigate();
+  const currentuid = fetchUserId();
+  const token = fetchUserToken();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`${BASE_URL}/getuser/${currentuid}`, {
+        headers: { token },
+      })
+      .then((response) => {
+        setLoading(false);
+        navigate("/");
+      })
+      .catch((error) => {
+        setLoading(false);
+        localStorage.clear();
+        console.log(error);
+      });
+  }, []);
+
   const decodeResponse = (response) => {
     let decode = jwtDecode(response.credential);
     const obj = {
@@ -28,6 +51,7 @@ const Login = () => {
       }
     });
   };
+  if (loading) return <Spinner />;
   return (
     <div className="flex justify-start items-center flex-col h-screen">
       <div className="relative w-full h-full">
