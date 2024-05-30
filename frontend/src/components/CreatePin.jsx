@@ -34,6 +34,7 @@ const CreatePin = ({ user }) => {
       setWrongImageType(true);
     }
   };
+
   const getImageURL = async () => {
     URL.revokeObjectURL(imageAsset);
     const cloudName = process.env.REACT_APP_CLOUD_NAME;
@@ -47,6 +48,7 @@ const CreatePin = ({ user }) => {
     );
     return res.data.secure_url;
   };
+
   const savePin = async (e) => {
     setLoading(true);
     if (imageAsset && title && destination && about) {
@@ -73,9 +75,11 @@ const CreatePin = ({ user }) => {
       setLoading(false);
     }
   };
+
   if (loading) {
     return <Spinner message="Posting image" />;
   }
+
   return (
     <div className="flex flex-col justigy-center items-center mt-5 lg:h-4/5">
       {fields && (

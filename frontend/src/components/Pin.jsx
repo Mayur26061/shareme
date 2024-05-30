@@ -15,10 +15,10 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
   const navigate = useNavigate();
   const token = fetchUserToken();
   const uid = fetchUserId();
-  //   const alreadySaved = true;
   const [alreadySaved, setAlreadySaved] = useState(
     !!savePost?.filter((item) => item._id === uid)?.length
   );
+
   const deletePin = async (ev) => {
     ev.stopPropagation();
     try{
@@ -34,6 +34,7 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
       console.log("ERORO")
     }
   };
+
   const savePin = (ev, id) => {
     ev.stopPropagation();
     if (!alreadySaved) {
@@ -48,7 +49,6 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
           }
         )
         .then((response) => {
-          // console.log(response.data);
           setAlreadySaved(true);
           window.location.reload();
         })
@@ -57,6 +57,7 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
         });
     }
   };
+
   return (
     <div>
       <div
