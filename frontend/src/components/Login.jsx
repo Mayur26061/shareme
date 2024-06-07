@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
-import { FcGoogle } from "react-icons/fc";
+import { GoogleLogin } from "@react-oauth/google";
 import shareVideo from "../assets/share.mp4";
 import logo from "../assets/logowhite.png";
 import { jwtDecode } from "jwt-decode";
@@ -42,8 +41,6 @@ const Login = () => {
     };
     axios.post(`${BASE_URL}/login`, { ...obj }).then((res) => {
       if (res.data.token) {
-        debugger;
-
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("uid", res.data.uid);
 

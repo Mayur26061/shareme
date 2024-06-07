@@ -1,6 +1,7 @@
 import React from 'react'
 import { IoMdSearch,IoMdAdd } from 'react-icons/io'
 import { useNavigate,Link } from 'react-router-dom'
+
 const Navbar = ({searchTerm, setSearchTerm, user}) => {
   const navigate = useNavigate()
   if(!user) return null

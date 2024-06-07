@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Spinner from "./Spinner";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
@@ -37,11 +37,11 @@ const CreatePin = ({ user }) => {
 
   const getImageURL = async () => {
     URL.revokeObjectURL(imageAsset);
-    const cloudName = process.env.REACT_APP_CLOUD_NAME;
+    const cloudName = import.meta.env.VITE_APP_CLOUD_NAME;
     const images = new FormData();
     images.append("file", image);
     images.append("cloud_name", cloudName);
-    images.append("upload_preset", process.env.REACT_APP_UPLOAD_PRESET);
+    images.append("upload_preset", import.meta.env.VITE_APP_UPLOAD_PRESET);
     const res = await axios.post(
       `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
       images

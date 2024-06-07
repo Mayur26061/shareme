@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { v4 as uuid4 } from "uuid";
 import { AiTwotoneDelete } from "react-icons/ai";
 import { MdDownloadForOffline } from "react-icons/md";
 import { BsFillArrowUpRightCircleFill } from "react-icons/bs";
@@ -11,7 +10,6 @@ import { BASE_URL } from "../utils/config";
 
 const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
   const [postHovered, setPostHovered] = useState(false);
-  const [savingPost, setSavingPost] = useState(false);
   const navigate = useNavigate();
   const token = fetchUserToken();
   const uid = fetchUserId();

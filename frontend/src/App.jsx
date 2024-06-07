@@ -5,7 +5,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const App = () => {
     return (
-    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENTID}>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_APP_GOOGLE_CLIENTID}>
         <Routes>
             <Route path='/login' element={<Login/>}/>
             <Route path='*' element={<Home/>}/>
