@@ -19,8 +19,7 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
 
   const deletePin = async (ev) => {
     ev.stopPropagation();
-    try{
-
+    try {
       await axios.post(
         `${BASE_URL}/deletepin/${_id}`,
         {},
@@ -28,8 +27,8 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
           headers: { token: token },
         }
       );
-    }catch{
-      console.log("ERORO")
+    } catch (err) {
+      console.log("Error:", err);
     }
   };
 
@@ -122,20 +121,23 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
                   className="bg-white p-2 opacity-70 hover:opacity-100 font-bold text-dark text-base rounded-3xl hover:shadow-md outline-none"
                   onClick={deletePin}
                 >
-                  <AiTwotoneDelete/>
+                  <AiTwotoneDelete />
                 </button>
               )}
             </div>
           </div>
         )}
       </div>
-      <Link to={`/user-profile/${postedBy._id}`} className="flex gap-2 mt-2 items-center bg-white rounded-lg">
-      <img
-      className="w-8 h-8 rounded-full object-cover"
-      src={postedBy?.image}
-      alt="user-profile"
-      />
-      <p className="font-semibold capitalize">{postedBy?.name}</p>
+      <Link
+        to={`/user-profile/${postedBy._id}`}
+        className="flex gap-2 mt-2 items-center bg-white rounded-lg"
+      >
+        <img
+          className="w-8 h-8 rounded-full object-cover"
+          src={postedBy?.image}
+          alt="user-profile"
+        />
+        <p className="font-semibold capitalize">{postedBy?.name}</p>
       </Link>
     </div>
   );

@@ -21,13 +21,18 @@ const Search = ({ searchTerm }) => {
           setLoading(false);
           setPins(response.data.pins);
         })
-        .catch((e) => {
+        .catch((err) => {
           setLoading(false);
+          console.log("Error:");
         });
     } else {
-      axios.get(`${BASE_URL}/getPin`).then((res) => {
-        setPins(res.data.pins);
-      });
+      try {
+        axios.get(`${BASE_URL}/getPin`).then((res) => {
+          setPins(res.data.pins);
+        });
+      } catch (err) {
+        console.log("Error:", err);
+      }
     }
   }, [searchTerm]);
   return (

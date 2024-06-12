@@ -16,17 +16,21 @@ const Pindetails = ({ user }) => {
   const token = fetchUserToken();
 
   const fetchPinDetails = async () => {
-    const res = await axios.get(BASE_URL + `/pin/${pinId}`, {
-      headers: { token },
-    });
-    setPinDetail(res.data.pin);
-    const res2 = await axios.get(`${BASE_URL}/getPin`, {
-      params: {
-        categoryId: res.data.pin.category,
-      },
-      headers: { token },
-    });
-    setPin(res2.data.pins)
+    try {
+      const res = await axios.get(BASE_URL + `/pin/${pinId}`, {
+        headers: { token },
+      });
+      setPinDetail(res.data.pin);
+      const res2 = await axios.get(`${BASE_URL}/getPin`, {
+        params: {
+          categoryId: res.data.pin.category,
+        },
+        headers: { token },
+      });
+      setPin(res2.data.pins);
+    } catch (err) {
+      console.log("Error:", err);
+    }
   };
   const addComment = async () => {
     setAddingComment(true);

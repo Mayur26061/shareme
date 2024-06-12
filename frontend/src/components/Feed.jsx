@@ -23,6 +23,7 @@ const Feed = () => {
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
       });
   }, [categoryId]);
   if (loading)

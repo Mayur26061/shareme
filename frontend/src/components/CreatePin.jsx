@@ -42,11 +42,16 @@ const CreatePin = ({ user }) => {
     images.append("file", image);
     images.append("cloud_name", cloudName);
     images.append("upload_preset", import.meta.env.VITE_APP_UPLOAD_PRESET);
-    const res = await axios.post(
-      `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
-      images
-    );
-    return res.data.secure_url;
+    try {
+      const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+        images
+      );
+      return res.data.secure_url;
+    } catch (err) {
+      console.log(err);
+      return;
+    }
   };
 
   const savePin = async (e) => {
@@ -60,11 +65,15 @@ const CreatePin = ({ user }) => {
         name: about,
         image: imageURL,
       };
-      await axios.post(`${BASE_URL}/createPin`, doc, {
-        headers: {
-          token: fetchUserToken(),
-        },
-      });
+      try {
+        await axios.post(`${BASE_URL}/createPin`, doc, {
+          headers: {
+            token: fetchUserToken(),
+          },
+        });
+      } catch (err) {
+        console.log(err);
+      }
       setLoading(false);
       navigate("/");
     } else {

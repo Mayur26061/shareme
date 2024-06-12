@@ -21,7 +21,7 @@ const Login = () => {
       .get(`${BASE_URL}/getuser/${currentuid}`, {
         headers: { token },
       })
-      .then((response) => {
+      .then(() => {
         setLoading(false);
         navigate("/");
       })

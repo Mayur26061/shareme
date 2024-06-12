@@ -9,7 +9,8 @@ import axios from "axios";
 import { BASE_URL } from "../utils/config";
 import { AiOutlineLogout } from "react-icons/ai";
 
-const randomImage = "https://source.unsplash.com/1600x900/?nature,photography,technology";
+const randomImage =
+  "https://source.unsplash.com/1600x900/?nature,photography,technology";
 const activeBtnStyles = "bg-red-500 text-white";
 const notActiveBtnStyles = "bg-primary mr-4 text-black";
 
@@ -32,7 +33,7 @@ const UserProfile = () => {
         setUser(response.data.user);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("Error:", error);
       });
   }, [userId]);
 
@@ -48,7 +49,7 @@ const UserProfile = () => {
         setPin(response.data.pins);
       });
   }, [text, userId]);
-  
+
   const logOut = () => {
     googleLogout();
     localStorage.clear();
@@ -90,12 +91,13 @@ const UserProfile = () => {
             <button
               type="button"
               onClick={(ev) => {
-              setText(ev.target.textContent);
-              setActiveBtn("created");
+                setText(ev.target.textContent);
+                setActiveBtn("created");
               }}
               className={`font-bold p-2 rounded-full w-20 outline-none ${
                 activeBtn === "created" ? activeBtnStyles : notActiveBtnStyles
-              }`}>
+              }`}
+            >
               Created
             </button>
             <button
