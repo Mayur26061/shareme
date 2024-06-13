@@ -6,7 +6,11 @@ import { categories, BASE_URL } from "../utils/config";
 import axios from "axios";
 import { fetchUserToken } from "../utils/fetchUser";
 import { useNavigate } from "react-router-dom";
-const CreatePin = ({ user }) => {
+import { useRecoilValue } from "recoil";
+import { userState } from "../stores/userState";
+
+const CreatePin = () => {
+  const user = useRecoilValue(userState)
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [about, setAbout] = useState("");

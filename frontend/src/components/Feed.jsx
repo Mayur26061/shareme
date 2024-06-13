@@ -10,7 +10,6 @@ const Feed = () => {
   const { categoryId } = useParams();
   useEffect(() => {
     setLoading(true);
-
     axios
       .get(`${BASE_URL}/getPin`, {
         params: {

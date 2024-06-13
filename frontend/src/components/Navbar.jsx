@@ -1,8 +1,13 @@
-import React from 'react'
 import { IoMdSearch,IoMdAdd } from 'react-icons/io'
 import { useNavigate,Link } from 'react-router-dom'
+import { useRecoilValue } from "recoil";
+import { userState } from "../stores/userState";
+import { useRecoilState } from 'recoil';
+import { searchstate } from '../stores/searchState';
+const Navbar = () => {
+  const [searchTerm, setSearchTerm] = useRecoilState(searchstate)
 
-const Navbar = ({searchTerm, setSearchTerm, user}) => {
+  const user = useRecoilValue(userState)
   const navigate = useNavigate()
   if(!user) return null
 

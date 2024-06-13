@@ -9,14 +9,15 @@ import logo from "../assets/logo.png";
 import { fetchUserToken, fetchUserId } from "../utils/fetchUser";
 import axios from "axios";
 import { BASE_URL } from "../utils/config";
+import { userState } from "../stores/userState";
+import { useRecoilState } from "recoil";
 
 const Home = () => {
   const [toggleSidebar, setToggleSidebar] = useState(false);
-  const [user, setUser] = useState(null);
   const scrollRef = useRef(null);
   const token = fetchUserToken();
   const userId = fetchUserId();
-
+  const [user, setUser] = useRecoilState(userState);
   useEffect(() => {
     axios
       .get(`${BASE_URL}/getuser/${userId}`, {
@@ -37,7 +38,7 @@ const Home = () => {
   return (
     <div className="flex bg-gray-50 md:flex-row flex-col h-screen transaction-height duration-75 ease-out">
       <div className="hidden md:flex h-screen flex-initial">
-        <Sidebar user={user && user} />
+        <Sidebar/>
       </div>
       <div className="flex md:hidden flex-row">
         <div className="p-2 w-full flex flex-row justify-between items-center shadow-md">
@@ -64,14 +65,14 @@ const Home = () => {
                 onClick={() => setToggleSidebar(false)}
               />
             </div>
-            <Sidebar user={user && user} closeToggle={setToggleSidebar} />
+            <Sidebar closeToggle={setToggleSidebar} />
           </div>
         )}
       </div>
       <div className="pb-2 flex-1 h-screen overflow-y-scroll" ref={scrollRef}>
         <Routes>
           <Route path="/user-profile/:userId" element={<UserProfile />} />
-          <Route path="/*" element={<Pins user={user && user} />} />
+          <Route path="/*" element={<Pins />} />
         </Routes>
       </div>
     </div>
