@@ -107,7 +107,6 @@ router.get("/pin/:pinId", authenticate, async (req, res) => {
 router.post("/deletepin/:pinId", authenticate, async (req, res) => {
     try {
         const pin = await Pin.findByIdAndDelete(req.params.pinId)
-        console.log(pin)
         res.send({ message: "Deleted" })
     }
     catch (err) {

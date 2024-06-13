@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import MasonaryLayout from "./MasonryLayout";
 import Spinner from "./Spinner";
 import axios from "axios";
 import { BASE_URL } from "../utils/config";
 import { fetchUserToken } from "../utils/fetchUser";
-const Search = ({ searchTerm }) => {
+import { useRecoilState } from "recoil";
+import { searchstate } from "../stores/searchState";
+const Search = () => {
+  const [searchTerm,setSearchTerm] = useRecoilState(searchstate)
   const [pins, setPins] = useState(null);
   const [loading, setLoading] = useState(false);
   const token = fetchUserToken();
@@ -23,7 +26,7 @@ const Search = ({ searchTerm }) => {
         })
         .catch((err) => {
           setLoading(false);
-          console.log("Error:");
+          console.log("Error:",err);
         });
     } else {
       try {
@@ -35,6 +38,12 @@ const Search = ({ searchTerm }) => {
       }
     }
   }, [searchTerm]);
+
+  // cleanup function to remove search text
+  useEffect(()=>{
+    return ()=>{setSearchTerm('')}
+  },[])
+
   return (
     <div>
       {loading && <Spinner message="Searching for pins" />}

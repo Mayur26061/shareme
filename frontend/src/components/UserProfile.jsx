@@ -8,6 +8,8 @@ import { fetchUserToken, fetchUserId } from "../utils/fetchUser";
 import axios from "axios";
 import { BASE_URL } from "../utils/config";
 import { AiOutlineLogout } from "react-icons/ai";
+import { useRecoilValue } from "recoil";
+import { userState } from "../stores/userState";
 
 const randomImage =
   "https://source.unsplash.com/1600x900/?nature,photography,technology";
@@ -15,7 +17,7 @@ const activeBtnStyles = "bg-red-500 text-white";
 const notActiveBtnStyles = "bg-primary mr-4 text-black";
 
 const UserProfile = () => {
-  const [user, setUser] = useState(null);
+  const user = useRecoilValue(userState)
   const [pin, setPin] = useState(null);
   const [text, setText] = useState("Created");
   const [activeBtn, setActiveBtn] = useState("created");
@@ -23,19 +25,6 @@ const UserProfile = () => {
   const { userId } = useParams();
   const currentuid = fetchUserId();
   const token = fetchUserToken();
-
-  useEffect(() => {
-    axios
-      .get(`${BASE_URL}/getuser/${userId}`, {
-        headers: { token },
-      })
-      .then((response) => {
-        setUser(response.data.user);
-      })
-      .catch((error) => {
-        console.log("Error:", error);
-      });
-  }, [userId]);
 
   useEffect(() => {
     axios

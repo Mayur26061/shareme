@@ -6,8 +6,11 @@ import Spinner from "./Spinner";
 import axios from "axios";
 import { BASE_URL } from "../utils/config";
 import { fetchUserToken } from "../utils/fetchUser";
+import { useRecoilValue } from "recoil";
+import { userState } from "../stores/userState";
 
-const Pindetails = ({ user }) => {
+const Pindetails = () => {
+  const user = useRecoilValue(userState)
   const [pin, setPin] = useState(null);
   const [pinDetail, setPinDetail] = useState(null);
   const [comment, setComment] = useState("");
@@ -46,7 +49,6 @@ const Pindetails = ({ user }) => {
       }
     );
     setAddingComment(false);
-
     fetchPinDetails();
     setComment("");
   };
@@ -123,10 +125,10 @@ const Pindetails = ({ user }) => {
             ))}
           </div>
           <div className="flex flex-wrap mt-6 gap-3">
-            <Link to={`user-profile/${pinDetail.postedBy._id}`}>
+            <Link to={`user-profile/${user._id}`}>
               <img
                 className="w-10 h-10 rounded-full cursor-pointer"
-                src={pinDetail.postedBy?.image}
+                src={user?.image}
                 alt="user-profile"
               />
             </Link>
