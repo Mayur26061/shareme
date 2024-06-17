@@ -76,7 +76,7 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
                   download="custom-filename.jpg"
                   target="_blank"
                   onClick={(e) => e.stopPropagation()}
-                  className="bg-white w-8 h-8 rounded-full flex items-center justify-center text-dark text-xl opacity-75 hover:shadow-md outline-none"
+                  className="bg-white text-black w-8 h-8 rounded-full flex items-center justify-center text-dark hover:opacity-100 text-xl opacity-70 hover:shadow-md outline-none"
                   rel="noreferrer"
                 >
                   <MdDownloadForOffline />
@@ -85,7 +85,7 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
               {alreadySaved ? (
                 <button
                   type="button"
-                  className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
+                  className="bg-red-500 opacity-70 hover:opacity-100 font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
                   disabled
                 >
                   {savePost?.length} Saved
@@ -94,7 +94,7 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
                 <button
                   onClick={(ev) => savePin(ev, _id)}
                   type="button"
-                  className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
+                  className="bg-red-500 opacity-70 hover:opacity-100 font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
                 >
                   Save
                 </button>
@@ -107,7 +107,7 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
                   target="_blank"
                   rel="noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="bg-white flex items-center gap-2 text-black font-bold p-2 pl-4 pr-4 rounded-full opacity-70 hover:opacity-100 hover:shadow-md"
+                  className="bg-white flex items-center gap-2 text-stone-950 font-bold p-2 pl-4 pr-4 rounded-full opacity-70 hover:opacity-100 hover:shadow-md"
                 >
                   <BsFillArrowUpRightCircleFill />
                   {destination.length > 15
@@ -118,7 +118,7 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
               {postedBy._id === uid && (
                 <button
                   type="button"
-                  className="bg-white p-2 opacity-70 hover:opacity-100 font-bold text-dark text-base rounded-3xl hover:shadow-md outline-none"
+                  className="bg-white text-black p-2 opacity-70 hover:opacity-100 font-bold text-dark text-base rounded-3xl hover:shadow-md outline-none"
                   onClick={deletePin}
                 >
                   <AiTwotoneDelete />
@@ -130,7 +130,7 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
       </div>
       <Link
         to={`/user-profile/${postedBy._id}`}
-        className="flex gap-2 mt-2 items-center bg-white rounded-lg"
+        className="flex gap-2 mt-2 items-center rounded-lg"
       >
         <img
           className="w-8 h-8 rounded-full object-cover"

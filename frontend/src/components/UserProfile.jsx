@@ -11,10 +11,7 @@ import { AiOutlineLogout } from "react-icons/ai";
 import { useRecoilValue } from "recoil";
 import { userState } from "../stores/userState";
 
-const randomImage =
-  "https://source.unsplash.com/1600x900/?nature,photography,technology";
-const activeBtnStyles = "bg-red-500 text-white";
-const notActiveBtnStyles = "bg-primary mr-4 text-black";
+const randomImage = "https://source.unsplash.com/1600x900/?nature,photography,technology";
 
 const UserProfile = () => {
   const user = useRecoilValue(userState)
@@ -57,7 +54,7 @@ const UserProfile = () => {
             <img
               src={randomImage}
               alt="images"
-              className="w-full h-370 xl:h-510 shadow-lg object-cover"
+              className="w-full h-370 xl:h-510 shadow-lg object-cover bg-stone-950"
             />
             <img
               src={user.image}
@@ -84,7 +81,7 @@ const UserProfile = () => {
                 setActiveBtn("created");
               }}
               className={`font-bold p-2 rounded-full w-20 outline-none ${
-                activeBtn === "created" ? activeBtnStyles : notActiveBtnStyles
+                activeBtn === "created" && "bg-red-500" 
               }`}
             >
               Created
@@ -96,7 +93,7 @@ const UserProfile = () => {
                 setActiveBtn("saved");
               }}
               className={`font-bold p-2 rounded-full w-20 outline-none ${
-                activeBtn === "saved" ? activeBtnStyles : notActiveBtnStyles
+                 activeBtn === "saved" && "bg-red-500"
               }`}
             >
               Saved

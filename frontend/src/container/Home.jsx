@@ -2,10 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { HiMenu } from "react-icons/hi";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { Link, Routes, Route } from "react-router-dom";
-import UserProfile from "../components/UserProfile";
-import Sidebar from "../components/Sidebar";
+import { UserProfile, Sidebar } from "../components";
 import Pins from "./Pins";
-import logo from "../assets/logo.png";
+import logo from "../assets/logowhite.png";
 import { fetchUserToken, fetchUserId } from "../utils/fetchUser";
 import axios from "axios";
 import { BASE_URL } from "../utils/config";
@@ -14,7 +13,6 @@ import { useRecoilState } from "recoil";
 
 const Home = () => {
   const [toggleSidebar, setToggleSidebar] = useState(false);
-  const scrollRef = useRef(null);
   const token = fetchUserToken();
   const userId = fetchUserId();
   const [user, setUser] = useRecoilState(userState);
@@ -32,13 +30,10 @@ const Home = () => {
       });
   }, []);
 
-  useEffect(() => {
-    scrollRef.current.scrollTo(0, 0);
-  }, []);
   return (
-    <div className="flex bg-gray-50 md:flex-row flex-col h-screen transaction-height duration-75 ease-out">
+    <div className="flex bg-stone-900 text-white md:flex-row flex-col h-screen transition-height duration-75 ease-out">
       <div className="hidden md:flex h-screen flex-initial">
-        <Sidebar/>
+        <Sidebar />
       </div>
       <div className="flex md:hidden flex-row">
         <div className="p-2 w-full flex flex-row justify-between items-center shadow-md">
@@ -69,7 +64,7 @@ const Home = () => {
           </div>
         )}
       </div>
-      <div className="pb-2 flex-1 h-screen overflow-y-scroll" ref={scrollRef}>
+      <div className="pb-2 flex-1 h-screen overflow-y-scroll hide-scrollbar">
         <Routes>
           <Route path="/user-profile/:userId" element={<UserProfile />} />
           <Route path="/*" element={<Pins />} />
