@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Spinner from "./Spinner";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
@@ -10,7 +10,7 @@ import { useRecoilValue } from "recoil";
 import { userState } from "../stores/userState";
 
 const CreatePin = () => {
-  const user = useRecoilValue(userState)
+  const user = useRecoilValue(userState);
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [about, setAbout] = useState("");
@@ -21,6 +21,7 @@ const CreatePin = () => {
   const [imageAsset, setImageAsset] = useState(null);
   const [wrongImageType, setWrongImageType] = useState(false);
   const [image, setImage] = useState(null);
+  const scrollref = useRef(null);
 
   const updateImage = (e) => {
     const { type } = e.target.files[0];
@@ -82,6 +83,7 @@ const CreatePin = () => {
       navigate("/");
     } else {
       setFields(true);
+      scrollref.current.scrollIntoView({ behavior: "smooth", block: "start" });
       setTimeout(() => {
         setFields(false);
       }, 2000);
@@ -94,15 +96,16 @@ const CreatePin = () => {
   }
 
   return (
-    <div className="flex flex-col justigy-center items-center mt-5 lg:h-4/5">
-      {fields && (
-        <p className="text-red-500 mb-5 text-xl transition-all duration-150 ease-in">
-          Please fill in all the fields.
-        </p>
-      )}
-      <div className="flex lg:flex-col flex-col justify-center items-center bg-white lg:p-5 p-3 lg:w-4/5 w-full">
-        <div className="bg-secondaryColor p-3 flex flex-0.7 w-full">
-          <div className="flex justify-center items-center flex-col border-2 border-dotted border-gray-300 p-3 w-full h-420">
+    <div className="flex flex-col justify-center items-center mt-5 lg:h-4/5">
+      <p
+        className="text-red-600 bg-red-600/[.2] h-6 text-xl transition-all duration-150 ease-in"
+        ref={scrollref}
+      >
+        {fields && "Please fill in all the fields."}
+      </p>
+      <div className="flex lg:flex-col flex-col justify-center items-center lg:p-5 p-3 lg:w-4/5 w-full">
+        <div className="bg-stone-950 p-3 flex flex-0.7 w-full">
+          <div className="flex justify-center items-center flex-col border-2 border-dotted border-stone-300 p-3 w-full h-420">
             {wrongImageType && <p>Wrong Image Type</p>}
             {!imageAsset ? (
               <label>
@@ -113,7 +116,7 @@ const CreatePin = () => {
                     </p>
                     <p className="text-lg">Click to Upload</p>
                   </div>
-                  <p className="mt-32 text-gray-400">
+                  <p className="mt-32 text-stone-400">
                     Use high-quality JPG, SVG, PNG, GIF or TIFF less then 20 MB
                   </p>
                 </div>
@@ -134,7 +137,7 @@ const CreatePin = () => {
                 />
                 <button
                   type="button"
-                  className="absolute bottom-3 right-3 p-3 rounded-full bg-white text-xl cursor-pointer outline-none hover:shadow-md transition-all duration-500 ease-in-out"
+                  className="absolute bottom-3 right-3 p-3 rounded-full bg-stone-950 text-xl cursor-pointer outline-none hover:shadow-md transition-all duration-500 ease-in-out"
                   onClick={() => setImageAsset(null)}
                 >
                   <MdDelete />
@@ -149,10 +152,10 @@ const CreatePin = () => {
             value={title}
             placeholder="Title"
             onChange={(e) => setTitle(e.target.value)}
-            className="outline-none text-2xl sm:text-3xl font-bold boder-b-2 border-gray-200 p-2 "
+            className="outline-none text-2xl sm:text-3xl font-bold border-b-2 bg-stone-900 border-stone-200 p-2 placeholder:text-stone-600"
           />
           {user && (
-            <div className="flex gap-2 my-2 items-center bg-white rounded-lg">
+            <div className="flex gap-2 my-2 items-center rounded-lg">
               <img src={user.image} className="w-10 h-10 rounded-full" alt="" />
               <p className="font-bold">{user.name}</p>
             </div>
@@ -161,14 +164,14 @@ const CreatePin = () => {
             type="text"
             value={about}
             placeholder="About"
-            className="outline-none text-base sm:text-lg boder-b-2 border-gray-200 p-2 "
+            className="outline-none text-base sm:text-lg border-b-2  bg-stone-900  border-stone-200 p-2 placeholder:text-stone-600"
             onChange={(e) => setAbout(e.target.value)}
           />
           <input
             type="text"
             value={destination}
             placeholder="Add a destination link"
-            className="outline-none text-base sm:text-lg boder-b-2 border-gray-200 p-2 "
+            className="outline-none text-base sm:text-lg border-b-2 bg-stone-900 border-stone-200 p-2 placeholder:text-stone-600"
             onChange={(e) => setDestination(e.target.value)}
           />
           <div className="flex flex-col">
@@ -178,15 +181,13 @@ const CreatePin = () => {
               </p>
               <select
                 onChange={(e) => setCategory(e.target.value)}
-                className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer capitalize"
+                className="outline-none w-4/5 text-base border-b-2 bg-stone-900 border-stone-200 p-2 rounded-md cursor-pointer capitalize"
               >
-                <option value="other" className="bg-white">
-                  Select Category
-                </option>
+                <option value="other">Select Category</option>
                 {categories.map((cat) => (
                   <option
                     key={cat.name}
-                    className="text-base border-0 outline-none bg-white text-black"
+                    className="text-base border-0 outline-none"
                     value={cat.name}
                   >
                     {cat.name}
@@ -198,7 +199,7 @@ const CreatePin = () => {
               <button
                 type="button"
                 onClick={savePin}
-                className="bg-red-400 text-white font-bold p-2 rounded-full w-28 outline-none"
+                className="bg-red-400 font-bold p-2 rounded-full w-28 outline-none"
               >
                 Save Pin
               </button>
