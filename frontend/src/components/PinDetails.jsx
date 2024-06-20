@@ -8,11 +8,13 @@ import { BASE_URL } from "../utils/config";
 import { fetchUserToken } from "../utils/fetchUser";
 import { useRecoilValue } from "recoil";
 import { userState } from "../stores/userState";
+import Notfound from "./Notfound";
 
 const Pindetails = () => {
   const user = useRecoilValue(userState)
   const [pin, setPin] = useState(null);
   const [pinDetail, setPinDetail] = useState(null);
+  const [loading, setLoading] = useState(false)
   const [comment, setComment] = useState("");
   const [addingComment, setAddingComment] = useState(false);
   const { pinId } = useParams();
@@ -20,6 +22,7 @@ const Pindetails = () => {
 
   const fetchPinDetails = async () => {
     try {
+      setLoading(true)
       const res = await axios.get(BASE_URL + `/pin/${pinId}`, {
         headers: { token },
       });
@@ -34,6 +37,7 @@ const Pindetails = () => {
     } catch (err) {
       console.log("Error:", err);
     }
+    setLoading(false)
   };
   const addComment = async () => {
     setAddingComment(true);
@@ -55,7 +59,8 @@ const Pindetails = () => {
   useEffect(() => {
     fetchPinDetails();
   }, [pinId]);
-  if (!pinDetail) return <Spinner message="Loading pin.." />;
+  if (loading) return <Spinner message="Loading pin.." />;
+  if (!pinDetail) return <Notfound/>
   return (
     <div>
       <div
@@ -154,7 +159,7 @@ const Pindetails = () => {
           <h2 className="text-center font-bold text-2xl mt-8 mb-4">
             More like this
           </h2>
-          <MasonryLayout pins={pin} />
+          <MasonryLayout pins={pin} setPins={setPin}/>
         </>
       ) : (
         <div className="mt-8">

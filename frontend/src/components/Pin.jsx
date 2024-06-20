@@ -8,7 +8,10 @@ import axios from "axios";
 import { fetchUserToken, fetchUserId } from "../utils/fetchUser";
 import { BASE_URL } from "../utils/config";
 
-const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
+const Pin = ({
+  pin: { postedBy, _id, image, savePost, destination },
+  filterPins,
+}) => {
   const [postHovered, setPostHovered] = useState(false);
   const navigate = useNavigate();
   const token = fetchUserToken();
@@ -27,6 +30,7 @@ const Pin = ({ pin: { postedBy, _id, image, savePost, destination } }) => {
           headers: { token: token },
         }
       );
+      filterPins(_id);
     } catch (err) {
       console.log("Error:", err);
     }

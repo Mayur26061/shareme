@@ -48,6 +48,7 @@ router.get("/getPin", async (req, res) => {
 
 router.post("/createPin", authenticate, async (req, res) => {
     try {
+        console.log(req.body)
         const usr = await getUser(req.userId)
         const data = { ...req.body, 'postedBy': usr }
         const pin = await Pin.create(data);
@@ -106,7 +107,8 @@ router.get("/pin/:pinId", authenticate, async (req, res) => {
 
 router.post("/deletepin/:pinId", authenticate, async (req, res) => {
     try {
-        const pin = await Pin.findByIdAndDelete(req.params.pinId)
+        await Pin.findByIdAndDelete(req.params.pinId)
+        await Comment.deleteMany({pinId:req.params.pinId})
         res.send({ message: "Deleted" })
     }
     catch (err) {
@@ -119,7 +121,7 @@ router.post("/addcomment/:pinId", authenticate, async (req, res) => {
         const user = await getUser(req.userId);
         const pin = await Pin.findById(req.params.pinId);
         const { comment } = req.body
-        const com = await Comment.create({ comment, postedBy: user })
+        const com = await Comment.create({ comment, postedBy: user, pinId:pin._id })
         pin.comment.push(com)
         await pin.save()
         res.send({ message: "Added comment" })

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Masonry from "react-masonry-css";
 import Pin from "./Pin";
 const breakpointObj = {
@@ -9,14 +10,23 @@ const breakpointObj = {
   500: 1,
 };
 
-const MasonryLayout = ({ pins }) => {
+const MasonryLayout = ({ pins, setPins }) => {
+  const deletePin = (id) => {
+    console.log("delete");
+    setPins(pins.filter((data) => data._id !== id));
+  };
   return (
     <Masonry
       className="flex animate-slide-fwd gap-1 text-white"
       breakpointCols={breakpointObj}
     >
       {pins?.map((pin) => (
-        <Pin pin={pin} className="w-max" key={pin._id}></Pin>
+        <Pin
+          pin={pin}
+          className="w-max"
+          key={pin._id}
+          filterPins={deletePin}
+        ></Pin>
       ))}
     </Masonry>
   );

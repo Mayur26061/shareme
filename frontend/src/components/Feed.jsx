@@ -4,6 +4,8 @@ import Spinner from "./Spinner";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../utils/config";
+import Notfound from "./Notfound";
+
 const Feed = () => {
   const [loading, setLoading] = useState(false);
   const [pins, setPins] = useState(null);
@@ -28,9 +30,9 @@ const Feed = () => {
   if (loading)
     return <Spinner message="We are adding new ideas to your feed" />;
 
-  if (!pins?.length) return <h2>No pins available</h2>;
+  if (!pins?.length) return <Notfound />;
 
-  return <div>{pins && <MasonryLayout pins={pins} />}</div>;
+  return <div>{pins && <MasonryLayout pins={pins} setPins={setPins} />}</div>;
 };
 
 export default Feed;

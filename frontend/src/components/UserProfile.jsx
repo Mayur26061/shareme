@@ -10,6 +10,7 @@ import { BASE_URL } from "../utils/config";
 import { AiOutlineLogout } from "react-icons/ai";
 import { useRecoilValue } from "recoil";
 import { userState } from "../stores/userState";
+import Notfound from "./Notfound";
 
 const randomImage = "https://source.unsplash.com/1600x900/?nature,photography,technology";
 
@@ -101,12 +102,10 @@ const UserProfile = () => {
           </div>
           {pin?.length ? (
             <div className="px-2">
-              <MasonryLayout pins={pin} />
+              <MasonryLayout pins={pin} setPins={setPin}/>
             </div>
           ) : (
-            <div className="flex justify-center font-bold items-center w-full text-xl mt-2">
-              No Pins Found!
-            </div>
+            <Notfound/>
           )}
         </div>
       </div>

@@ -22,6 +22,7 @@ const pinSchema = new mongoose.Schema({
 });
 const commentSchema = new mongoose.Schema({
     comment: String,
+    pinId: { type: mongoose.Schema.Types.ObjectId, ref: "Pin" },
     postedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 const Pin = mongoose.model("Pin", pinSchema);
