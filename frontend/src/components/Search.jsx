@@ -14,30 +14,35 @@ const Search = () => {
   const token = fetchUserToken();
 
   useEffect(() => {
-    if (searchTerm.trim()) {
-      setLoading(true);
-      axios
-        .get(`${BASE_URL}/search`, {
-          headers: { token },
-          params: { search: searchTerm },
-        })
-        .then((response) => {
-          setLoading(false);
-          setPins(response.data.pins);
-        })
-        .catch((err) => {
-          setLoading(false);
-          console.log("Error:",err);
-        });
-    } else {
-      try {
-        axios.get(`${BASE_URL}/getPin`).then((res) => {
-          setPins(res.data.pins);
-        });
-      } catch (err) {
-        console.log("Error:", err);
-      }
+    function searchQuery() {
+        if (searchTerm.trim()) {
+            setLoading(true);
+            axios
+                .get(`${BASE_URL}/search`, {
+                    headers: { token },
+                    params: { search: searchTerm },
+                })
+                .then((response) => {
+                    setLoading(false);
+                    setPins(response.data.pins);
+                })
+                .catch((err) => {
+                    setLoading(false);
+                    console.log("Error:", err);
+                });
+        } else {
+            try {
+                axios.get(`${BASE_URL}/getPin`).then((res) => {
+                    setPins(res.data.pins);
+                });
+            } catch (err) {
+                console.log("Error:", err);
+            }
+        }
     }
+    const debounce = setTimeout(searchQuery, 400);
+
+    return () => clearTimeout(debounce)
   }, [searchTerm]);
 
   // cleanup function to remove search text
