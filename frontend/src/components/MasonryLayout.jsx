@@ -12,7 +12,6 @@ const breakpointObj = {
 
 const MasonryLayout = ({ pins, setPins }) => {
   const deletePin = (id) => {
-    console.log("delete");
     setPins(pins.filter((data) => data._id !== id));
   };
   return (
