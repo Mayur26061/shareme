@@ -7,7 +7,7 @@ const userRoute = require("./routes/userRoute");
 require("dotenv").config();
 const port = 8080;
 
-server.use(bodyParser.json());
+server.use(bodyParser.json({limit:"4000kb"}));
 server.use(cors());
 server.use("/user", userRoute);
 

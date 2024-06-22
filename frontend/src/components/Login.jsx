@@ -37,7 +37,6 @@ const Login = () => {
     const obj = {
       username: decode.email,
       name: decode.name,
-      image: decode.picture.replace("=s96-c", ""),
     };
     axios.post(`${BASE_URL}/login`, { ...obj }).then((res) => {
       if (res.data.token) {

@@ -108,7 +108,7 @@ router.get("/pin/:pinId", authenticate, async (req, res) => {
 router.post("/deletepin/:pinId", authenticate, async (req, res) => {
     try {
         await Pin.findByIdAndDelete(req.params.pinId)
-        await Comment.deleteMany({pinId:req.params.pinId})
+        await Comment.deleteMany({ pinId: req.params.pinId })
         res.send({ message: "Deleted" })
     }
     catch (err) {
@@ -121,7 +121,7 @@ router.post("/addcomment/:pinId", authenticate, async (req, res) => {
         const user = await getUser(req.userId);
         const pin = await Pin.findById(req.params.pinId);
         const { comment } = req.body
-        const com = await Comment.create({ comment, postedBy: user, pinId:pin._id })
+        const com = await Comment.create({ comment, postedBy: user, pinId: pin._id })
         pin.comment.push(com)
         await pin.save()
         res.send({ message: "Added comment" })
@@ -150,6 +150,16 @@ router.get("/search", async (req, res) => {
     try {
         const pins = await getPins(query)
         res.send({ pins });
+    }
+    catch (err) {
+        return res.status(500).send({ error: err })
+    }
+})
+
+router.post("/editProfile/:userID", authenticate, async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate(req.params.userID, { ...req.body }, { new: true })
+        return res.send({ user })
     }
     catch (err) {
         return res.status(500).send({ error: err })
