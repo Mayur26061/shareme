@@ -26,7 +26,8 @@ const Home = () => {
         localStorage.setItem("uid", response.data.user._id);
       })
       .catch((error) => {
-        console.log(error);
+        localStorage.clear()
+        console.log(error); 
       });
   }, []);
 
