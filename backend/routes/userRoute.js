@@ -8,7 +8,7 @@ const userEditOject = z.object({
     name: z.string().optional(),
     image: z.string().url().optional(),
 })
-const userVal = useredit.extend({
+const userVal = userEditOject.extend({
     username: z.string().min(5),
 })
 const pinVals = z.object({

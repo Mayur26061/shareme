@@ -1,4 +1,4 @@
-export const BASE_URL = "http://localhost:8080/user"
+export const BASE_URL = import.meta.env.VITE_APP_BASE_URL
 export const categories = [
     {
       name: 'cars',

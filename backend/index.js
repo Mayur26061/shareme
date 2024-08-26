@@ -19,7 +19,7 @@ async function connectDB() {
         console.log("Failed to connect DB", err)
     }
 }
-server.listen(port, () => {
+server.listen(process.env.PORT, () => {
     console.log("Server is Running");
     connectDB()
 });
